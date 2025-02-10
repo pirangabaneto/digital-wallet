@@ -18,9 +18,9 @@
         <div class="grid grid-cols-1 md:grid-cols-2 min-h-screen sm:justify-center items-center bg-gray-100 dark:bg-gray-900 relative">
     
             <!-- conteúdo principal -->
-            <div class="w-full h-full px-6 py-6 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
+            <div class="w-full h-full px-6 pt-6 pb-40 md:pb-0 bg-white dark:bg-gray-800 shadow-md overflow-hidden sm:rounded-lg">
                 <div class="w-full text-center mt-12">
-                    <h1 class="text-3xl font-bold text-[#034B5E] pb-20 md:mt-40">
+                    <h1 class="text-3xl font-bold text-[#034B5E] pb-20">
                         Hi, welcome To
                         <span class="text-[#F8AD15]">PirasWallet</span>
                     </h1>
