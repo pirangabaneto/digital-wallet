@@ -31,6 +31,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/home', [WalletController::class, 'index'])->name('wallet.index');
     Route::get('/deposit', [WalletController::class, 'getDepositForm'])->name('wallet.deposit.form');
     Route::post('/deposit', [WalletController::class, 'deposit'])->name('wallet.deposit');
+    Route::get('/deposit/history', [WalletController::class, 'depositHistory'])->name('deposit.history');
+
 });
 
 require __DIR__.'/auth.php';

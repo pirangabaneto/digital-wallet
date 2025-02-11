@@ -46,4 +46,22 @@ class WalletController extends Controller
             return back()->withErrors(['error' => 'An error occurred while processing the deposit.']);
         }
     }
+
+    public function depositHistory()
+    {
+        $user = auth()->user();
+        $wallet = $user->wallet;
+
+        if (!$wallet) {
+            return back()->with('error', 'Wallet not found.');
+        }
+
+        $deposits = Transaction::where('wallet_id', $wallet->id)
+            ->where('type', 'deposit')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return view('deposit.index', compact('deposits'));
+    }
+
 }

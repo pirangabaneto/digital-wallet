@@ -20,7 +20,7 @@
                         Transfer History
                     </x-nav-link>
 
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('deposit.history')" :active="request()->routeIs('deposit.history')">
                         Deposit History
                     </x-nav-link>
 
@@ -81,7 +81,7 @@
                     Transfer History
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link :href="route('deposit.history')">
                     Deposit History
                 </x-responsive-nav-link>
 
