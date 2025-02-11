@@ -16,7 +16,7 @@
                         Home
                     </x-nav-link>
 
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('transfer.history')" :active="request()->routeIs('transfer.history')">
                         Transfer History
                     </x-nav-link>
 
@@ -24,7 +24,7 @@
                         Deposit History
                     </x-nav-link>
 
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('wallet.transfer.form')" :active="request()->routeIs('wallet.transfer.form')">
                         New Transfer
                     </x-nav-link>
 
@@ -77,7 +77,7 @@
                     Home
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link :href="route('transfer.history')">
                     Transfer History
                 </x-responsive-nav-link>
 
@@ -85,7 +85,7 @@
                     Deposit History
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link :href="route('wallet.transfer.form')">
                     New Transfer
                 </x-responsive-nav-link>
 

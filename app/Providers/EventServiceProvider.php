@@ -26,6 +26,10 @@ class EventServiceProvider extends ServiceProvider
         \App\Events\DepositMade::class => [
             \App\Listeners\CreateTransactionForDeposit::class,
         ],
+
+        \App\Events\TransferMade::class => [
+            \App\Listeners\CreateTransactionForTransfer::class,
+        ],
     ];
 
     /**
