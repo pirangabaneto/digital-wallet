@@ -5,13 +5,17 @@
             <div class="flex">
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
-                    <a href="{{ route('dashboard') }}">
+                    <a href="{{ route('wallet.index') }}">
                         <img src="{{ asset('images/white-logo.png') }}" alt="Logo" class="block w-48">
                     </a>
                 </div>
 
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('wallet.index')" :active="request()->routeIs('wallet.index')">
+                        Home
+                    </x-nav-link>
+
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         Transfer History
                     </x-nav-link>
@@ -24,7 +28,7 @@
                         New Transfer
                     </x-nav-link>
 
-                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+                    <x-nav-link :href="route('wallet.deposit.form')" :active="request()->routeIs('wallet.deposit.form')">
                         New Deposit 
                     </x-nav-link>
 
@@ -69,6 +73,10 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                <x-responsive-nav-link :href="route('wallet.index')">
+                    Home
+                </x-responsive-nav-link>
+
                 <x-responsive-nav-link :href="route('profile.edit')">
                     Transfer History
                 </x-responsive-nav-link>
@@ -81,7 +89,7 @@
                     New Transfer
                 </x-responsive-nav-link>
 
-                <x-responsive-nav-link :href="route('profile.edit')">
+                <x-responsive-nav-link :href="route('wallet.deposit.form')">
                     New Deposit 
                 </x-responsive-nav-link>
 
