@@ -9,23 +9,20 @@ use Illuminate\Broadcasting\PrivateChannel;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
-use App\Models\Wallet;
+use App\Models\Transaction;
 
-class DepositMade
+class TransactionReversed
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public $wallet;
-    public $amount;
+    public $transaction;
     public $type;
-
     /**
      * Create a new event instance.
      */
-    public function __construct(Wallet $wallet, $amount, string $type = 'deposit')
+    public function __construct(Transaction $transaction, $type)
     {
-        $this->wallet = $wallet;
-        $this->amount = $amount;
+        $this->transaction = $transaction;
         $this->type = $type;
     }
 

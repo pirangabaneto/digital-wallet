@@ -10,36 +10,62 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     @if (session('success'))
-                        <div class="mb-4 p-4 bg-green-500 text-white rounded">
-                            {{ session('success') }}
-                        </div>
-                    @endif
+                    <div class="mb-4 p-4 bg-[#298097] text-white rounded">
+                        {{ session('success') }}
+                    </div>
+                @endif
 
-                    @if (session('error'))
-                        <div class="mb-4 p-4 bg-red-500 text-white rounded">
-                            {{ session('error') }}
-                        </div>
-                    @endif
+                @if (session('error'))
+                    <div class="mb-4 p-4 bg-red-500 text-white rounded">
+                        {{ session('error') }}
+                    </div>
+                @endif
+
+                @if ($errors->any())
+                    <div class="mb-4 p-4 bg-red-500 text-white rounded">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
                     @if ($deposits->isEmpty())
                         <p class="text-gray-300">No deposits found.</p>
                     @else
-                        <table class="w-full border-collapse border border-gray-600 text-center">
-                            <thead>
-                                <tr class="bg-gray-700 text-white">
-                                    <th class="border border-gray-600 px-4 py-2">Date</th>
-                                    <th class="border border-gray-600 px-4 py-2">Amount</th>
+                    <table class="w-full border-collapse border border-gray-600 text-center">
+                        <thead>
+                            <tr class="bg-gray-700 text-white">
+                                <th class="border border-gray-600 px-4 py-2">Date</th>
+                                <th class="border border-gray-600 px-4 py-2">Amount</th>
+                                <th class="border border-gray-600 px-4 py-2">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($deposits as $deposit)
+                                <tr class="border border-gray-600 {{ $deposit->type === 'deposit_reverse' ? 'bg-red-200' : '' }}">
+                                    <td class="px-4 py-2">{{ $deposit->created_at->format('m/d/Y H:i') }}</td>
+                                    <td class="px-4 py-2 text-green-500">$ {{ number_format($deposit->amount, 2, '.', ',') }}</td>
+                                    <td class="px-4 py-2">
+                                        @if ($deposit->type !== 'deposit_reverse')
+                                            <form action="{{ route('deposit.reverse', $deposit->id) }}" method="POST" onsubmit="return confirm('Are you sure you want to reverse this deposit?');">
+                                                @csrf
+                                                @method('POST')
+                                                <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-700">
+                                                    Reverse
+                                                </button>
+                                            </form>
+                                        @else
+                                            Deposit Reversed
+                                        @endif
+                                    </td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($deposits as $deposit)
-                                    <tr class="border border-gray-600">
-                                        <td class="px-4 py-2">{{ $deposit->created_at->format('m/d/Y H:i') }}</td>
-                                        <td class="px-4 py-2 text-green-500">$ {{ number_format($deposit->amount, 2, '.', ',') }}</td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                            @endforeach
+
+                        </tbody>
+                    </table>
+                    
                     @endif
 
                 </div>

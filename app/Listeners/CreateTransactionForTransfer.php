@@ -27,6 +27,7 @@ class CreateTransactionForTransfer
             'to_wallet_id' => $event->toWallet->id,
             'type' => 'transfer',
             'amount' => $event->amount,
+            'type' => $event->type,
         ]);
     }
 }

@@ -25,7 +25,7 @@ class CreateTransactionForDeposit
         Transaction::create([
             'wallet_id' => $event->wallet->id,
             'to_wallet_id' => $event->wallet->id,
-            'type' => 'deposit',
+            'type' => $event->type,
             'amount' => $event->amount,
         ]);
     }

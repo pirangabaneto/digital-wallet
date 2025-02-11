@@ -9,6 +9,7 @@ use App\Events\DepositMade;
 use Illuminate\Support\Facades\DB;
 use App\Models\Wallet;
 use App\Events\TransferMade;
+use App\Events\TransactionReversed;
 
 class WalletController extends Controller
 {
@@ -59,8 +60,8 @@ class WalletController extends Controller
         }
 
         $deposits = Transaction::where('wallet_id', $wallet->id)
-            ->where('type', 'deposit')
-            ->orderBy('created_at', 'asc')
+            ->whereIn('type', ['deposit', 'deposit_reverse'])
+            ->orderBy('created_at', 'desc')
             ->get();
 
         return view('deposit.index', compact('deposits'));
@@ -123,12 +124,76 @@ class WalletController extends Controller
             $query->where('wallet_id', $wallet->id)
                   ->orWhere('to_wallet_id', $wallet->id);
         })
-            ->where('type', 'transfer')
-            ->orderBy('created_at', 'asc')
+            ->whereIn('type', ['transfer', 'transfer_reverse'])
+            ->orderBy('created_at', 'desc')
             ->with('wallet.user', 'to_wallet.user')
             ->get();
 
         return view('transfer.index', compact('transfers', 'wallet'));
     }
+
+    public function depositReverse(Request $request, $depositId)
+    {
+        $transaction = Transaction::with(['wallet', 'to_wallet'])->findOrFail($depositId);
+        $wallet = auth()->user()->wallet;
+        
+        if ($transaction->wallet_id !== $wallet->id && $transaction->to_wallet_id !== $wallet->id) {
+            return back()->withErrors(['error' => 'Unauthorized action.']);
+        }
+        
+        DB::beginTransaction();
+
+        try {
+            if ($transaction->wallet->balance < $transaction->amount) {
+                return back()->withErrors(['error' => 'Insufficient balance to reverse deposit.']);
+            }
+            
+            $transaction->wallet->decrement('balance', $transaction->amount);
+            
+            event(new TransactionReversed($transaction,'deposit_reverse'));
+            
+            DB::commit();
+
+            return redirect()->route('wallet.index', $wallet)->with('success', 'Deposit successfully reversed!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'An error occurred while processing the deposit reverse.']);
+        }
+
+    }
+
+    public function transferReverse(Request $request, $transferId)
+    {
+        $transaction = Transaction::with(['wallet', 'to_wallet'])->findOrFail($transferId);
+        $wallet = auth()->user()->wallet;
+        
+        if ($transaction->wallet_id !== $wallet->id) {
+            return back()->withErrors(['error' => 'Unauthorized action. You can only reverse transactions you have made!']);
+        }
+
+        if ($transaction->to_wallet->balance < $transaction->amount) {
+            return back()->withErrors(['error' => 'Insufficient balance to reverse transfer.']);
+        }
+
+        DB::beginTransaction();
+        
+        try {
+            $fromWallet = $transaction->wallet;
+            $toWallet = $transaction->to_wallet;
+
+            $toWallet->decrement('balance', $transaction->amount);
+            $fromWallet->increment('balance', $transaction->amount);
+            
+            event(new TransactionReversed($transaction,'transfer_reverse'));
+            
+            DB::commit();
+
+            return redirect()->route('wallet.index', $wallet)->with('success', 'Transfer successfully reversed!');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return back()->withErrors(['error' => 'An error occurred while processing the transfer reverse.']);
+        }
+    }
+
 
 }

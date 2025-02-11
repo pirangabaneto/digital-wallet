@@ -32,10 +32,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/deposit', [WalletController::class, 'getDepositForm'])->name('wallet.deposit.form');
     Route::post('/deposit', [WalletController::class, 'deposit'])->name('wallet.deposit');
     Route::get('/deposit/history', [WalletController::class, 'depositHistory'])->name('deposit.history');
+    Route::post('/deposit/reverse/{depositId}', [WalletController::class, 'depositReverse'])->name('deposit.reverse');
 
     Route::get('/transfer', [WalletController::class, 'getTransferForm'])->name('wallet.transfer.form');
     Route::post('/transfer', [WalletController::class, 'transfer'])->name('wallet.transfer');
     Route::get('/transfer/history', [WalletController::class, 'transferHistory'])->name('transfer.history');
+    Route::post('/transfer/reverse/{transferId}', [WalletController::class, 'transferReverse'])->name('transfer.reverse');
 });
 
 require __DIR__.'/auth.php';

@@ -18,15 +18,17 @@ class TransferMade
     public $fromWallet;
     public $toWallet;
     public $amount;
+    public $type;
 
     /**
      * Create a new event instance.
      */
-    public function __construct(Wallet $fromWallet, Wallet $toWallet, $amount)
+    public function __construct(Wallet $fromWallet, Wallet $toWallet, $amount, string $type = 'transfer')
     {
         $this->fromWallet = $fromWallet;
         $this->toWallet = $toWallet;
         $this->amount = $amount;
+        $this->type = $type;
     }
 
     /**
