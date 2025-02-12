@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 use App\Events\UserRegistered;
+use App\Events\WelcomeEmailSent;
 
 class RegisteredUserController extends Controller
 {
@@ -45,8 +46,8 @@ class RegisteredUserController extends Controller
             'cpf' => $request->cpf,
         ]);
 
-        event(new Registered($user));
         event(new UserRegistered($user));
+        event(new WelcomeEmailSent($user));
 
         Auth::login($user);
 
