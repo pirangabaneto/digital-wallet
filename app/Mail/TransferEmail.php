@@ -8,25 +8,26 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
-use App\Models\User;
 use \Illuminate\Mail\Mailables\Address;
 
-class DepositEmail extends Mailable
+class TransferEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
     public $name;
     public $amount;
-    public $walletId;
+    public $fromWalletId;
+    public $toWalletId;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(string $name, float $amount, int $walletId)
+    public function __construct(string $name, float $amount, int $fromWalletId, int $toWalletId)
     {
         $this->name = $name;
         $this->amount = $amount;
-        $this->walletId = $walletId;
+        $this->fromWalletId = $fromWalletId;
+        $this->toWalletId = $toWalletId;
     }
 
     /**
@@ -35,7 +36,7 @@ class DepositEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Deposit Confirmed - PirasWallet',
+            subject: 'Transfer Confirmed - PirasWallet',
             from: new Address('pirangabaneto@gmail.com', 'PirasWallet'),
         );
     }
@@ -46,11 +47,12 @@ class DepositEmail extends Mailable
     public function content(): Content
     {
         return new Content(
-            markdown: 'emails.deposit',
+            markdown: 'emails.transfer',
             with: [
                 'name' => $this->name,
                 'amount' => $this->amount,
-                'walletId' => $this->walletId,
+                'fromWalletId' => $this->fromWalletId,
+                'toWalletId' => $this->toWalletId,
             ],
         );
     }

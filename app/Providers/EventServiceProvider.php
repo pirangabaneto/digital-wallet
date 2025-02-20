@@ -30,6 +30,7 @@ class EventServiceProvider extends ServiceProvider
 
         \App\Events\TransferMade::class => [
             \App\Listeners\CreateTransactionForTransfer::class,
+            \App\Listeners\SendTransferEmail::class,
         ],
 
         \App\Events\TransactionReversed::class => [
