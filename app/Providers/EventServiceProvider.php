@@ -35,6 +35,7 @@ class EventServiceProvider extends ServiceProvider
 
         \App\Events\TransactionReversed::class => [
             \App\Listeners\UpdateTransactionForReversed::class,
+            \App\Listeners\SendTransactionRevervedEmail::class,
         ],
 
         \App\Events\WelcomeEmailSent::class => [
